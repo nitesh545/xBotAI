@@ -1,4 +1,3 @@
-/*
 import React, {useEffect} from 'react';
 import {
 	Box,
@@ -92,4 +91,3 @@ export default function ChatInterface() {
 		</Box>
 	)
 }
-*/

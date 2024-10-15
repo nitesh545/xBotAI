@@ -29,9 +29,9 @@ function App() {
 					<Grid2 item xs={1} lg={2} xl={3} sx={{backgroundColor: 'white'}}>
 						<Sidebar/>
 					</Grid2>
-					{/*<Grid2 item xs='grow' lg='grow' xl='grow'>*/}
-					{/*	<ChatInterface/>*/}
-					{/*</Grid2>*/}
+					<Grid2 item xs='grow' lg='grow' xl='grow'>
+						<ChatInterface/>
+					</Grid2>
 				</Grid2>
 			</div>
 		</ThemeProvider>
