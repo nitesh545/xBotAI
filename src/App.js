@@ -102,8 +102,11 @@ function App() {
 						<Sidebar handleClickNewChat={handleClickNewChat} handleClickPastConversations={updateShowPastConversations} />
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
-						{/*{!showPastConversations && (<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>)}*/}
-						{showPastConversations===true ? (<Conversations conversations={conversations}/>) : (<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>)}
+						{showPastConversations===true ? (
+							<Conversations conversations={conversations}/>
+						) : (
+							<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>
+						)}
 					</Grid2>
 				</Grid2>
 			</div>

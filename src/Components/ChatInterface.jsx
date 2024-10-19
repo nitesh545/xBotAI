@@ -19,9 +19,13 @@ import Suggestions from "./Suggestions";
 import ChatCard from "./ChatCard";
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
+import FeedbackModal from "./FeedbackModal";
 
 export default function ChatInterface(props) {
 	const [showThumbs, setShowThumbs] = React.useState(false);
+	const [showRating, setShowRating] = React.useState(false);
+	const [rating, setRating] = React.useState(0);
+	const [open, setOpen] = React.useState(false);
 
 	useEffect(() => {
 
@@ -34,6 +38,14 @@ export default function ChatInterface(props) {
 	const handleMouseLeave = () => {
 		setShowThumbs(false);
 	}
+
+	const handleClickShowRating = () => {
+		setShowThumbs(false);
+		setShowRating(true);
+	}
+
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 
 	return (
 		<Box sx={{width: '100%', height: '100vh'}}>
@@ -63,25 +75,34 @@ export default function ChatInterface(props) {
 										width: '85vw',
 										borderRadius: '1.5rem',
 										backgroundColor: 'rgba(215, 199, 244, 0.13)'
-									}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+									}} onMouseEnter={()=>{if(index%2==1){handleMouseEnter();}}} onMouseLeave={()=>{if(index%2==1){handleMouseLeave();}}}>
 										<img src={index % 2 === 0 ? user : logosmall} alt="userImage" />
 										<Box sx={{mx: '2rem'}}>
 											<Typography variant='h4'
 														align='left'>{index % 2 === 0 ? "You" : "Soul AI"}</Typography>
 											<Typography variant='p' align='left'>{talk}</Typography>
 											{
-												index % 2 === 1 ?
-													( showThumbs && (<Box sx={{display: 'flex', mt: '0.25rem'}}>
+												index ===  props.talk.allTalks.length-1?
+													( showThumbs && !showRating && (<Box sx={{display: 'flex'}}>
 													<Typography variant='body2' align='left'>10:33 AM</Typography>
 
-													<IconButton>
-														<ThumbUpAltOutlinedIcon sx={{ml: '1rem'}} color='disabled'/>
+													<IconButton onClick={()=>{setShowRating(true);}}>
+														<ThumbUpAltOutlinedIcon fontSize='small' sx={{ml: '1rem'}} color='disabled'/>
 													</IconButton>
-													<IconButton>
-														<ThumbDownOffAltOutlinedIcon sx={{ml: '0.5rem'}}
+													<IconButton onClick={()=>{setShowRating(true);}}>
+														<ThumbDownOffAltOutlinedIcon fontSize='small' sx={{ml: '0.5rem'}}
 																					 color='disabled'/>
 													</IconButton>
 												</Box>)): (null)
+											}
+											{
+												index ===  props.talk.allTalks.length - 1 && showRating && (
+													<Box sx={{display: 'flex'}}>
+														<Typography variant='body2' align='left'>10:33 AM</Typography>
+														<Rating value={rating} sx={{ml:'1rem'}} onChange={(event, newValue)=>{setRating(newValue);setOpen(true);}} />
+														<FeedbackModal open={open} handleOpen={handleOpen} handleClose={handleClose} />
+													</Box>
+												)
 											}
 										</Box>
 									</Card>

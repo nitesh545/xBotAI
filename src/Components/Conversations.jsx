@@ -43,7 +43,7 @@ export default function Conversations(props) {
 										display: "flex",
 										margin: '1rem',
 										padding: '1rem',
-										// width: '85vw',
+										width: '85vw',
 										borderRadius: '1.5rem',
 										backgroundColor: 'rgba(215, 199, 244, 0.13)'
 									}}>
