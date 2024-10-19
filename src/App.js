@@ -32,6 +32,7 @@ function App() {
 	});
 	const [aiData, setAiData] = React.useState([]);
 	const [pendingQuestion, setPendingQuestion] = useState("");
+	const [conversations, setConversations] = React.useState([]);
 
 	useEffect( () => {
 		setAiData(data);
@@ -55,6 +56,10 @@ function App() {
 
 	const updateMessage = (value) => {
 		setTalk({...talk, inputMessage: value});
+	}
+
+	const updateConversations = () => {
+		setConversations([...conversations, talk.allTalks]);
 	}
 
 	//{todo - search response from aiData if question is matched}
@@ -81,7 +86,7 @@ function App() {
 						<Sidebar/>
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
-						<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} />
+						<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>
 					</Grid2>
 				</Grid2>
 			</div>

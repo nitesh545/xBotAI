@@ -78,6 +78,7 @@ export default function ChatInterface(props) {
 							props.handleAskClick();
 						}} sx={{width: '5vw', margin: '1rem'}}>Ask</Button>
 						<Button variant="contained" color="primary" onClick={() => {
+							props.updateConversations();
 						}} sx={{width: '5vw', margin: '1rem'}}>Save</Button>
 					</Box>
 				</Box>
