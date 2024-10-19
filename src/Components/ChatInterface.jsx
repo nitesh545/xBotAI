@@ -21,15 +21,28 @@ import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 
 export default function ChatInterface(props) {
+	const [showThumbs, setShowThumbs] = React.useState(false);
+
 	useEffect(() => {
 
 	}, []);
+
+	const handleMouseEnter = () => {
+		setShowThumbs(true);
+	}
+
+	const handleMouseLeave = () => {
+		setShowThumbs(false);
+	}
+
 	return (
 		<Box sx={{width: '100%', height: '100vh'}}>
 			<Navbar/>
 			<Box sx={{alignContent: 'center'}}>
-				{ !props.talk.started && (<div><Typography variant='h4' fontWeight='bold' align='center'>How Can I Help You Today?</Typography>
-					<Box component='img' src={logo} alt='logoimage' sx={{width: '5rem'}}/> </div>)}
+				{!props.talk.started && (
+					<div><Typography variant='h4' fontWeight='bold' align='center'>How Can I Help You
+						Today?</Typography>
+						<Box component='img' src={logo} alt='logoimage' sx={{width: '5rem'}}/></div>)}
 			</Box>
 			<Box sx={{
 				display: 'flex',
@@ -43,20 +56,32 @@ export default function ChatInterface(props) {
 						{
 							props.talk.allTalks.map((talk, index) => (
 								<Stack key={index}>
-									<Card sx={{display: "flex", margin: '1rem', padding: '1rem', width: '85vw', borderRadius: '1.5rem', backgroundColor: 'rgba(215, 199, 244, 0.13)'}}>
-										<img src={index%2 === 0 ? user : logosmall} alt="userImage"/>
+									<Card sx={{
+										display: "flex",
+										margin: '1rem',
+										padding: '1rem',
+										width: '85vw',
+										borderRadius: '1.5rem',
+										backgroundColor: 'rgba(215, 199, 244, 0.13)'
+									}} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+										<img src={index % 2 === 0 ? user : logosmall} alt="userImage" />
 										<Box sx={{mx: '2rem'}}>
-											<Typography variant='h4' align='left'>{index%2 === 0 ? "You" : "Soul AI"}</Typography>
+											<Typography variant='h4'
+														align='left'>{index % 2 === 0 ? "You" : "Soul AI"}</Typography>
 											<Typography variant='p' align='left'>{talk}</Typography>
 											{
-												index%2 === 1 ? (
-													<Box sx={{display: 'flex', mt:'0.5rem'}}>
-														<Typography variant='body2' align='left'>10:33 AM</Typography>
+												index % 2 === 1 ?
+													( showThumbs && (<Box sx={{display: 'flex', mt: '0.25rem'}}>
+													<Typography variant='body2' align='left'>10:33 AM</Typography>
 
+													<IconButton>
 														<ThumbUpAltOutlinedIcon sx={{ml: '1rem'}} color='disabled'/>
-														<ThumbDownOffAltOutlinedIcon sx={{ml: '0.5rem'}} color='disabled'/>
-													</Box>
-												) : null
+													</IconButton>
+													<IconButton>
+														<ThumbDownOffAltOutlinedIcon sx={{ml: '0.5rem'}}
+																					 color='disabled'/>
+													</IconButton>
+												</Box>)): (null)
 											}
 										</Box>
 									</Card>

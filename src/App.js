@@ -62,6 +62,16 @@ function App() {
 		setConversations([...conversations, talk.allTalks]);
 	}
 
+	const handleClickNewChat = () => {
+		setTalk({
+			inputMessage: "",
+			response: "",
+			allTalks: [],
+			started: false,
+		});
+		setPendingQuestion("");
+	}
+
 	//{todo - search response from aiData if question is matched}
 	// triggered when ask button is clicked
 	const handleAskClick = () => {
@@ -83,10 +93,11 @@ function App() {
 			<div className="App">
 				<Grid2 container spacing={1} sx={{backgroundColor: '#D7C7F433'}}>
 					<Grid2 item xs={1} lg={2} xl={3} sx={{backgroundColor: 'white'}}>
-						<Sidebar/>
+						<Sidebar handleClickNewChat={handleClickNewChat} />
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
 						<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>
+						{/*<Conversations conversations={conversations}/>*/}
 					</Grid2>
 				</Grid2>
 			</div>
