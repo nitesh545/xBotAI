@@ -17,6 +17,8 @@ import logosmall from "../assets/logo87.png";
 import user from "../assets/userImage.png";
 import Suggestions from "./Suggestions";
 import ChatCard from "./ChatCard";
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 
 export default function ChatInterface(props) {
 	useEffect(() => {
@@ -40,12 +42,22 @@ export default function ChatInterface(props) {
 					<Stack alignItems="center">
 						{
 							props.talk.allTalks.map((talk, index) => (
-								<Stack>
+								<Stack key={index}>
 									<Card sx={{display: "flex", margin: '1rem', padding: '1rem', width: '85vw', borderRadius: '1.5rem', backgroundColor: 'rgba(215, 199, 244, 0.13)'}}>
 										<img src={index%2 === 0 ? user : logosmall} alt="userImage"/>
 										<Box sx={{mx: '2rem'}}>
-											<Typography variant='h4' align='left'>{index%2 === 0 ? "You" : "SoulAI"}</Typography>
+											<Typography variant='h4' align='left'>{index%2 === 0 ? "You" : "Soul AI"}</Typography>
 											<Typography variant='p' align='left'>{talk}</Typography>
+											{
+												index%2 === 1 ? (
+													<Box sx={{display: 'flex', mt:'0.5rem'}}>
+														<Typography variant='body2' align='left'>10:33 AM</Typography>
+
+														<ThumbUpAltOutlinedIcon sx={{ml: '1rem'}} color='disabled'/>
+														<ThumbDownOffAltOutlinedIcon sx={{ml: '0.5rem'}} color='disabled'/>
+													</Box>
+												) : null
+											}
 										</Box>
 									</Card>
 								</Stack>
