@@ -31,10 +31,27 @@ function App() {
 		started: false,
 	});
 	const [aiData, setAiData] = React.useState([]);
+	const [pendingQuestion, setPendingQuestion] = useState("");
 
-	useEffect(() => {
+	useEffect( () => {
 		setAiData(data);
 	}, []);
+
+	useEffect(() => {
+		if (pendingQuestion) {
+			const arr_responses = aiData.filter((x) => x.question === pendingQuestion);
+			let r = arr_responses.length > 0
+				? arr_responses[0].response
+				: "As an AI language Model, I cannot help you out!";
+
+			setTalk(prevTalk => ({
+				...prevTalk,
+				response: r,
+				allTalks: [...prevTalk.allTalks, pendingQuestion, r],
+			}));
+			setPendingQuestion("");
+		}
+	}, [pendingQuestion, aiData]);
 
 	const updateMessage = (value) => {
 		setTalk({...talk, inputMessage: value});
@@ -43,14 +60,12 @@ function App() {
 	//{todo - search response from aiData if question is matched}
 	// triggered when ask button is clicked
 	const handleAskClick = () => {
-		let arr_responses = aiData.filter((x)=>x.question===talk.inputMessage);
-		if(arr_responses.length>0){
-			let r = arr_responses[0].response;
-			setTalk({...talk, response: r, allTalks: [...talk.allTalks, talk.inputMessage, talk.response], started: talk.inputMessage.length > 0});
-		}
-		else {
-			setTalk({...talk, response: "As a AI language Model, I cannot help you out!", allTalks: [...talk.allTalks, talk.inputMessage, talk.response], started: talk.inputMessage.length > 0});
-		}
+		setTalk(prevTalk => ({
+			...prevTalk,
+			started: true,
+			inputMessage: "",
+			}));
+		setPendingQuestion(talk.inputMessage);
 	};
 
 	//{todo - save chats}
@@ -66,7 +81,7 @@ function App() {
 						<Sidebar/>
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
-						<ChatInterface inputMessage={talk.inputMessage} updateMessage={updateMessage} handleAskClick={handleAskClick} talkStarted={talk.started} />
+						<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} />
 					</Grid2>
 				</Grid2>
 			</div>
