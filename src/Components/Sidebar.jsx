@@ -4,12 +4,12 @@ import {Image} from "@mui/icons-material";
 import StyledButton from "./StyledButton";
 import NewChat from "./NewChat";
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 	return (
 		<div>
 			<Box color='primary'>
-				<NewChat/>
-				<StyledButton text="Past Conversations" />
+				<NewChat handleClickNewChat = {props.handleClickNewChat} />
+				<StyledButton text="Past Conversations" handleClickPastConversations={props.handleClickPastConversations} />
 			</Box>
 		</div>
 	);

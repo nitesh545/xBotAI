@@ -33,6 +33,7 @@ function App() {
 	const [aiData, setAiData] = React.useState([]);
 	const [pendingQuestion, setPendingQuestion] = useState("");
 	const [conversations, setConversations] = React.useState([]);
+	const [showPastConversations, setShowPastConversations] = useState(false);
 
 	useEffect( () => {
 		setAiData(data);
@@ -62,6 +63,10 @@ function App() {
 		setConversations([...conversations, talk.allTalks]);
 	}
 
+	const updateShowPastConversations = () => {
+		setShowPastConversations(true);
+	}
+
 	const handleClickNewChat = () => {
 		setTalk({
 			inputMessage: "",
@@ -70,6 +75,7 @@ function App() {
 			started: false,
 		});
 		setPendingQuestion("");
+		setShowPastConversations(false);
 	}
 
 	//{todo - search response from aiData if question is matched}
@@ -93,11 +99,11 @@ function App() {
 			<div className="App">
 				<Grid2 container spacing={1} sx={{backgroundColor: '#D7C7F433'}}>
 					<Grid2 item xs={1} lg={2} xl={3} sx={{backgroundColor: 'white'}}>
-						<Sidebar handleClickNewChat={handleClickNewChat} />
+						<Sidebar handleClickNewChat={handleClickNewChat} handleClickPastConversations={updateShowPastConversations} />
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
-						<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>
-						{/*<Conversations conversations={conversations}/>*/}
+						{/*{!showPastConversations && (<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>)}*/}
+						{showPastConversations===true ? (<Conversations conversations={conversations}/>) : (<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>)}
 					</Grid2>
 				</Grid2>
 			</div>

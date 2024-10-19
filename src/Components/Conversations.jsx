@@ -27,12 +27,14 @@ export default function Conversations(props) {
 			</Box>
 			<Box sx={{
 				display: 'flex',
-				height: '55%',
+				height: '85%',
 				flexDirection: 'column',
 				justifyContent: 'flex-end',
 			}}>
 				<Typography vairant='h2' align='left' fontWeight='bold'>Today's Chats</Typography>
-				<Box sx={{display: 'flex', justifyContent: 'center',}}>
+				<Box
+					// sx={{display: 'flex', justifyContent: 'flex-end'}}
+				>
 					{
 						props.conversations.map((talk, index) =>
 							(
@@ -60,20 +62,6 @@ export default function Conversations(props) {
 													</Box>
 												</Box>
 											))}</Typography>
-											{
-												index % 2 === 1 ?
-													(<Box sx={{display: 'flex', mt: '0.25rem'}}>
-														<Typography variant='body2' align='left'>10:33 AM</Typography>
-
-														<IconButton>
-															<ThumbUpAltOutlinedIcon sx={{ml: '1rem'}} color='disabled'/>
-														</IconButton>
-														<IconButton>
-															<ThumbDownOffAltOutlinedIcon sx={{ml: '0.5rem'}}
-																						 color='disabled'/>
-														</IconButton>
-													</Box>) : (null)
-											}
 										</Box>
 									</Card>
 								</Stack>
