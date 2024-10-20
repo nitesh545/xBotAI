@@ -4,9 +4,7 @@
 An application where the user can chat with an AI model & give some feedback at each stage of the conversation.
 
 ## Run the program
-```
-npm start
-```
+```npm start```
 
 ## Technical Corner
 ### Technologies Used:

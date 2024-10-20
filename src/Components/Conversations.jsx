@@ -31,9 +31,7 @@ export default function Conversations(props) {
 				justifyContent: 'flex-end',
 			}}>
 				<Typography vairant='h2' align='left' fontWeight='bold'>Today's Chats</Typography>
-				<Box
-					// sx={{display: 'flex', justifyContent: 'flex-end'}}
-				>
+				<Box>
 					{
 						props.conversations.map((talk, index) =>
 							(

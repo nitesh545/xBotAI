@@ -46,7 +46,8 @@ const ChatInterface = (props) => {
 		const newMessage = {
 			text: props.input,
 			sender: 'You',
-			time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+			time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+			rate: rating,
 		};
 
 		props.updateMessages(newMessage);
