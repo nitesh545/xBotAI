@@ -21,7 +21,6 @@ import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutl
 export default function Conversations(props) {
 	return (
 		<Box sx={{width: '85vh', height: '100vh'}}>
-			<Navbar/>
 			<Box sx={{alignContent: 'center'}}>
 				<Typography variant='h4' fontWeight='bold' align='center'>Conversation History</Typography>
 			</Box>
@@ -56,9 +55,10 @@ export default function Conversations(props) {
 														 style={{width: '4rem', height: '4rem'}}/>
 													<Box sx={{ml: '1rem'}}>
 														<Typography variant='h6' fontWeight='bold'
-																	align='left'>{i % 2 === 0 ? "You" : "Soul AI"}
+																	align='left'>{t.sender}
 														</Typography>
-														<Typography key={i}>{t}</Typography>
+														<Typography key={i}>{t.text}</Typography>
+														<Typography key={i} variant='caption'>{t.time}</Typography>
 													</Box>
 												</Box>
 											))}</Typography>

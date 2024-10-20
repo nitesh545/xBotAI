@@ -1,43 +1,36 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import {
-	Box,
-	Button,
 	Card,
-	CardActionArea, CardContent,
-	Container,
-	Grid2,
-	IconButton,
-	Rating, Stack,
+	CardContent,
+	Typography,
 	TextField,
-	Typography
-} from "@mui/material";
-import Navbar from "./Navbar";
-import logo from "../assets/Logo.png";
+	Button,
+	Avatar,
+	Box, IconButton, Rating
+} from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import logosmall from "../assets/logo87.png";
 import user from "../assets/userImage.png";
-import Suggestions from "./Suggestions";
-import ChatCard from "./ChatCard";
+import logo from "../assets/Logo.png";
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import FeedbackModal from "./FeedbackModal";
 
-export default function ChatInterface(props) {
+const ChatInterface = (props) => {
+
 	const [showThumbs, setShowThumbs] = React.useState(false);
 	const [showRating, setShowRating] = React.useState(false);
 	const [rating, setRating] = React.useState(0);
 	const [open, setOpen] = React.useState(false);
+	const [hoveredIndex, setHoveredIndex] = useState(null);
 
-	useEffect(() => {
-
-	}, []);
-
-	const handleMouseEnter = () => {
-		setShowThumbs(true);
-	}
+	const handleMouseEnter = (index) => {
+		setHoveredIndex(index);
+	};
 
 	const handleMouseLeave = () => {
-		setShowThumbs(false);
-	}
+		setHoveredIndex(null);
+	};
 
 	const handleClickShowRating = () => {
 		setShowThumbs(false);
@@ -47,88 +40,114 @@ export default function ChatInterface(props) {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	return (
-		<Box sx={{width: '100%', height: '100vh'}}>
-			<Navbar/>
-			<Box sx={{alignContent: 'center'}}>
-				{!props.talk.started && (
-					<div><Typography variant='h4' fontWeight='bold' align='center'>How Can I Help You
-						Today?</Typography>
-						<Box component='img' src={logo} alt='logoimage' sx={{width: '5rem'}}/></div>)}
-			</Box>
-			<Box sx={{
-				display: 'flex',
-				height: '85%',
-				flexDirection: 'column',
-				justifyContent: 'flex-end',
-			}}>
-				{!props.talk.started && <Suggestions/>}
-				{props.talk.started &&
-					<Stack alignItems="center">
-						{
-							props.talk.allTalks.map((talk, index) => (
-								<Stack key={index}>
-									<Card sx={{
-										display: "flex",
-										margin: '1rem',
-										padding: '1rem',
-										width: '85vw',
-										borderRadius: '1.5rem',
-										backgroundColor: 'rgba(215, 199, 244, 0.13)'
-									}} onMouseEnter={()=>{if(index%2==1){handleMouseEnter();}}} onMouseLeave={()=>{if(index%2==1){handleMouseLeave();}}}>
-										<img src={index % 2 === 0 ? user : logosmall} alt="userImage" />
-										<Box sx={{mx: '2rem'}}>
-											<Typography variant='h4'
-														align='left'>{index % 2 === 0 ? "You" : "Soul AI"}</Typography>
-											<Typography variant='p' align='left'>{talk}</Typography>
-											{
-												index ===  props.talk.allTalks.length-1?
-													( showThumbs && !showRating && (<Box sx={{display: 'flex'}}>
-													<Typography variant='body2' align='left'>10:33 AM</Typography>
+	const handleSend = () => {
+		if (props.input.trim() === '') return;
 
-													<IconButton onClick={()=>{setShowRating(true);}}>
-														<ThumbUpAltOutlinedIcon fontSize='small' sx={{ml: '1rem'}} color='disabled'/>
-													</IconButton>
-													<IconButton onClick={()=>{setShowRating(true);}}>
-														<ThumbDownOffAltOutlinedIcon fontSize='small' sx={{ml: '0.5rem'}}
-																					 color='disabled'/>
-													</IconButton>
-												</Box>)): (null)
-											}
-											{
-												index ===  props.talk.allTalks.length - 1 && showRating && (
-													<Box sx={{display: 'flex'}}>
-														<Typography variant='body2' align='left'>10:33 AM</Typography>
-														<Rating value={rating} sx={{ml:'1rem'}} onChange={(event, newValue)=>{setRating(newValue);setOpen(true);}} />
-														<FeedbackModal open={open} handleOpen={handleOpen} handleClose={handleClose} />
-													</Box>
-												)
-											}
-										</Box>
-									</Card>
-								</Stack>
-							))
-						}
-					</Stack>
-				}
-				<Box sx={{display: 'flex', justifyContent: 'center',}}>
-					<Box sx={{display: 'flex', justifyContent: 'center',}}>
-						<TextField
-							value={props.inputMessage}
-							onChange={(e) => {
-								props.updateMessage(e.target.value);
-							}}
-							sx={{margin: '1rem', width: '140vh'}}
-						/>
-						<Button variant="contained" color="primary" onClick={() => {
-							props.handleAskClick();
-						}} sx={{width: '5vw', margin: '1rem'}}>Ask</Button>
-						<Button variant="contained" color="primary" onClick={() => {
-							props.updateConversations();
-						}} sx={{width: '5vw', margin: '1rem'}}>Save</Button>
-					</Box>
-				</Box>
+		const newMessage = {
+			text: props.input,
+			sender: 'You',
+			time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+		};
+
+		props.updateMessages(newMessage);
+		// props.updateInput('');
+
+		// Simulate bot response
+		setTimeout(() => {
+			const botResponse = {
+				text: props.response,
+				sender: 'Soul AI',
+				time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
+			};
+			props.updateMessages(botResponse);
+		}, 1000);
+	};
+
+	return (
+		<Box sx={{maxWidth: '100vw', width: '70vw', margin: 'auto', padding: 2,}}>
+			<Box sx={{
+				height: '80vh',
+				overflowY: 'auto',
+				marginBottom: 2,
+				display: 'flex',
+				justifyContent: 'flex-end',
+				flexDirection: 'column'
+			}}>
+				{props.messages.map((message, index) => (
+					<Card key={index} sx={{marginBottom: 2, backgroundColor: 'rgba(215, 199, 244, 0.13)'}} onMouseEnter={()=>handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+						<CardContent>
+							<Box sx={{display: 'flex', alignItems: 'center', marginBottom: 1}}>
+								<Avatar src={message.sender === 'You' ? user : logo} sx={{
+									marginRight: 1,
+									bgcolor: message.sender === 'You' ? 'primary.main' : 'secondary.main'
+								}}>
+									{message.sender[0]}
+								</Avatar>
+								<Box sx={{}}>
+									<Typography align='left' variant="subtitle1" fontWeight='bold'>{message.sender}</Typography>
+									<Typography align='left' variant="body1">{message.text}</Typography>
+									<Box sx={{display: 'flex'}}>
+										<Typography align='left' variant="caption" sx={{display: 'block', marginTop: 1}}>
+											{message.time}
+										</Typography>
+										{message.sender === 'Soul AI' && hoveredIndex === index && !showRating && (
+											<Box sx={{display: 'flex', marginTop: 1}}>
+												{/*<Typography variant='body2' align='left'>{message.time}</Typography>*/}
+												<IconButton onClick={() => setShowRating(true)} sx={{width: '0.8rem', height: '0.8rem'}}>
+													<ThumbUpAltOutlinedIcon fontSize='small' sx={{ml: '1rem'}} color='disabled'/>
+												</IconButton>
+												<IconButton onClick={() => setShowRating(true)} sx={{width: '0.8rem', height: '0.8rem'}}>
+													<ThumbDownOffAltOutlinedIcon fontSize='small' sx={{ml: '2rem'}} color='disabled'/>
+												</IconButton>
+											</Box>
+										)}
+										{message.sender === 'Soul AI' && hoveredIndex === index && showRating && (
+											<Box sx={{display: 'flex'}}>
+												<Typography variant='body2' align='left'>{message.time}</Typography>
+												<Rating
+													value={rating}
+													sx={{ml:'1rem'}}
+													onChange={(event, newValue) => {
+														setRating(newValue);
+														setOpen(true);
+													}}
+												/>
+												<FeedbackModal open={open} handleOpen={handleOpen} handleClose={handleClose} />
+											</Box>
+										)}
+									</Box>
+								</Box>
+							</Box>
+						</CardContent>
+					</Card>
+				))}
+			</Box>
+			<Box sx={{display: 'flex'}}>
+				<TextField
+					fullWidth
+					variant="outlined"
+					value={props.input}
+					onChange={(e) => props.updateInput(e.target.value)}
+					onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+					placeholder="Type a message..."
+				/>
+				<Button
+					variant="contained"
+					onClick={handleSend}
+					sx={{marginLeft: 1}}
+				>
+					Ask
+				</Button>
+				<Button
+					variant="contained"
+					onClick={props.handleSaveClick}
+					sx={{marginLeft: 1}}
+				>
+					Save
+				</Button>
 			</Box>
 		</Box>
-	)
-}
+	);
+};
+
+export default ChatInterface;

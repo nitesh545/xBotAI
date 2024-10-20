@@ -7,6 +7,7 @@ import {Grid2} from "@mui/material";
 import Conversations from "./Components/Conversations";
 import React, {useEffect, useState} from "react";
 import data from "./sampleData.json";
+import Navbar from "./Components/Navbar";
 
 const theme = createTheme({
 	palette: {
@@ -24,43 +25,33 @@ const theme = createTheme({
 })
 
 function App() {
-	const [talk, setTalk] = useState({
-		inputMessage: "",
-		response: "",
-		allTalks: [],
-		started: false,
-	});
-	const [aiData, setAiData] = React.useState([]);
-	const [pendingQuestion, setPendingQuestion] = useState("");
-	const [conversations, setConversations] = React.useState([]);
+	const [aiData, setAiData] = useState([]);
+	const [conversations, setConversations] = useState([]);
 	const [showPastConversations, setShowPastConversations] = useState(false);
+	const [messages, setMessages] = useState([]);
+	const [input, setInput] = useState('');
+	const [response, setResponse] = useState('');
+
+	const updateMessages = (newMessage) => {
+		setMessages(prevMessages => [...prevMessages, newMessage]);
+	}
+
+	const updateInput = (value) => {
+		setInput(value);
+	}
 
 	useEffect( () => {
 		setAiData(data);
 	}, []);
 
 	useEffect(() => {
-		if (pendingQuestion) {
-			const arr_responses = aiData.filter((x) => x.question === pendingQuestion);
-			let r = arr_responses.length > 0
-				? arr_responses[0].response
-				: "As an AI language Model, I cannot help you out!";
-
-			setTalk(prevTalk => ({
-				...prevTalk,
-				response: r,
-				allTalks: [...prevTalk.allTalks, pendingQuestion, r],
-			}));
-			setPendingQuestion("");
-		}
-	}, [pendingQuestion, aiData]);
-
-	const updateMessage = (value) => {
-		setTalk({...talk, inputMessage: value});
-	}
+		let res = aiData.filter((x)=>x.question.includes(input));
+		if(res.length === 0){setResponse("As a AI language model, I cannot help you out!")}
+		else {setResponse(res[0].response);}
+	}, [input]);
 
 	const updateConversations = () => {
-		setConversations([...conversations, talk.allTalks]);
+		setConversations(prevConv => [...prevConv, messages]);
 	}
 
 	const updateShowPastConversations = () => {
@@ -68,30 +59,12 @@ function App() {
 	}
 
 	const handleClickNewChat = () => {
-		setTalk({
-			inputMessage: "",
-			response: "",
-			allTalks: [],
-			started: false,
-		});
-		setPendingQuestion("");
 		setShowPastConversations(false);
+		setMessages([]);
 	}
 
-	//{todo - search response from aiData if question is matched}
-	// triggered when ask button is clicked
-	const handleAskClick = () => {
-		setTalk(prevTalk => ({
-			...prevTalk,
-			started: true,
-			inputMessage: "",
-			}));
-		setPendingQuestion(talk.inputMessage);
-	};
-
-	//{todo - save chats}
-	// triggered when save button is clicked
 	const handleSaveClick = () => {
+		updateConversations();
 	};
 
 	return (
@@ -102,10 +75,11 @@ function App() {
 						<Sidebar handleClickNewChat={handleClickNewChat} handleClickPastConversations={updateShowPastConversations} />
 					</Grid2>
 					<Grid2 item xs='grow' lg='grow' xl='grow'>
+						<Navbar />
 						{showPastConversations===true ? (
 							<Conversations conversations={conversations}/>
 						) : (
-							<ChatInterface talk={talk} updateMessage={updateMessage} handleAskClick={handleAskClick} updateConversations={updateConversations}/>
+							<ChatInterface messages={messages} updateMessages={updateMessages} handleSaveClick={handleSaveClick} input={input} updateInput={updateInput} response={response}/>
 						)}
 					</Grid2>
 				</Grid2>
