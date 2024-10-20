@@ -104,7 +104,6 @@ const ChatInterface = (props) => {
 										)}
 										{message.sender === 'Soul AI' && hoveredIndex === index && showRating && (
 											<Box sx={{display: 'flex'}}>
-												<Typography variant='body2' align='left'>{message.time}</Typography>
 												<Rating
 													value={rating}
 													sx={{ml:'1rem'}}

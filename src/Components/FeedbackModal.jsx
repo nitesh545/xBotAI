@@ -40,7 +40,7 @@ export default function BasicModal(props) {
 					</Box>
 					<TextField multiline rows={4} sx={{width:'100%'}}/>
 					<Box sx={{mt: 1, display: 'flex', justifyContent: 'flex-end'}}>
-					<Button variant='contained' >Submit</Button>
+					<Button variant='contained' onClick={props.handleClose} >Submit</Button>
 					</Box>
 				</Box>
 			</Modal>
